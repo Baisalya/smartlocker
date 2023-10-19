@@ -6,24 +6,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return AppBar(
-      backgroundColor: Colors.white, // Set the background color
-      elevation: 0, // Remove the shadow
+      backgroundColor: Colors.white,
+      elevation: 0,
       title: Text(
         "Your App Title",
         style: TextStyle(
-          color: Colors.black, // Set text color
-          fontSize: 20, // Adjust the font size
+          color: Colors.black,
+          fontSize: screenWidth > 600 ? 24 : 20,
         ),
       ),
       actions: <Widget>[
         IconButton(
           icon: Icon(
             Icons.filter_list,
-            color: Colors.black, // Set the icon color
+            color: Colors.black,
           ),
           onPressed: () {
-            Scaffold.of(context).openDrawer(); // Open the drawer
+            Scaffold.of(context).openDrawer();
           },
         ),
         PopupMenuButton<String>(
@@ -34,38 +36,41 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Text(
                   'Home',
                   style: TextStyle(
-                    color: Colors.black, // Set text color
-                    fontSize: 16, // Adjust the font size
+                    color: Colors.black,
+                    fontSize: screenWidth > 600 ? 22 : 20,
                   ),
                 ),
               ),
+              PopupMenuDivider(), // Add a divider
               PopupMenuItem<String>(
                 value: 'Notification',
                 child: Text(
                   'Notification',
                   style: TextStyle(
-                    color: Colors.black, // Set text color
-                    fontSize: 16, // Adjust the font size
+                    color: Colors.black,
+                    fontSize: screenWidth > 600 ? 22 : 20,
                   ),
                 ),
               ),
+              PopupMenuDivider(), // Add a divider
               PopupMenuItem<String>(
                 value: 'Profile',
                 child: Text(
                   'Profile',
                   style: TextStyle(
-                    color: Colors.black, // Set text color
-                    fontSize: 16, // Adjust the font size
+                    color: Colors.black,
+                    fontSize: screenWidth > 600 ? 22 : 20,
                   ),
                 ),
               ),
+              PopupMenuDivider(), // Add a divider
               PopupMenuItem<String>(
                 value: 'Help Center',
                 child: Text(
                   'Help Center',
                   style: TextStyle(
-                    color: Colors.black, // Set text color
-                    fontSize: 16, // Adjust the font size
+                    color: Colors.black,
+                    fontSize: screenWidth > 600 ? 22 : 20,
                   ),
                 ),
               ),
@@ -75,17 +80,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Handle the selection here
             print("Selected: $selectedItem");
           },
-          child: Row(
-            children: [
-              Text('Progressive Towers',style: TextStyle(color: Colors.black),),
-              Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Colors.black, // Set the dropdown icon color
-              ),
-            ],
+          child: Center( // Center the content
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, // Center the row
+              children: [
+                Text(
+                  'Progressive Towers',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: screenWidth > 600 ? 22 : 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Colors.black,
+                ),
+              ],
+            ),
           ),
         ),
-        const Spacer(), // Spacer to push Dropdown and Avatar to the end
+        const Spacer(),
         CircleAvatar(
           backgroundImage: NetworkImage(
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY6HwtWnw9GiLWz1B8SwYz4Pvdpku1OCC-ww&usqp=CAU'),
@@ -94,4 +109,3 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
-
