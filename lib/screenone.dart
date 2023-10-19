@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class MyWidget extends StatefulWidget {
   @override
   _MyWidgetState createState() => _MyWidgetState();
@@ -9,6 +10,7 @@ class _MyWidgetState extends State<MyWidget> {
   int selectedOption = -1;
   PageController pageController = PageController(initialPage: 0);
   int currentPage = 0;
+
   void selectOption(int index) {
     setState(() {
       selectedOption = index;
@@ -23,18 +25,18 @@ class _MyWidgetState extends State<MyWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _buildGridView(),
+            buildGridView(),
             SizedBox(height: 10),
-            buildbooknowbutton(),
+            buildBookNowButton(),
             SizedBox(height: 10),
-            _buildHorizontalContainer(),
+            buildHorizontalContainer(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildGridView() {
+  Widget buildGridView() {
     return GridView.builder(
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -46,35 +48,120 @@ class _MyWidgetState extends State<MyWidget> {
           onTap: () {
             selectOption(index);
           },
-          child: Card(
-            elevation: selectedOption == index ? 8.0 : 2.0,
-            margin: EdgeInsets.all(8.0),
-            color: selectedOption == index ? Colors.indigo : Colors.white,
-            child: Center(
-              child: Text('Option $index'),
-            ),
+          child: CustomCard(
+            selectedOption: selectedOption,
+            index: index,
           ),
         );
       },
     );
   }
-  Widget buildbooknowbutton() {
+
+  Widget buildBookNowButton() {
+    return CustomButton(
+      text: 'Book Now',
+      onPressed: () {
+        // Handle button press logic here
+      },
+    );
+  }
+
+  Widget buildHorizontalContainer() {
+    List<ContainerData> containers = [
+      ContainerData(
+        title: "Up To 20% OFF",
+        subtitle: "On All the cabinets",
+      ),
+      ContainerData(
+        title: "Container 2",
+        subtitle: "Subtitle 2",
+      ),
+      // Add more containers as needed
+    ];
+
+    return Column(
+      children: <Widget>[
+        CustomContainerSlider(
+          containers: containers,
+          pageController: pageController,
+          onPageChanged: (int page) {
+            setState(() {
+              currentPage = page;
+            });
+          },
+        ),
+        SizedBox(height: 10),
+        buildPageIndicator(containers.length),
+      ],
+    );
+  }
+
+  Widget buildPageIndicator(int pageCount) {
+    List<Widget> indicators = List.generate(pageCount, (int index) {
+      return Container(
+        width: 10.0,
+        height: 10.0,
+        margin: EdgeInsets.symmetric(horizontal: 4.0),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: currentPage == index ? Colors.blue : Colors.grey,
+        ),
+      );
+    });
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(
+          height: 30,
+          child: Row(children: indicators),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomCard extends StatelessWidget {
+  final int selectedOption;
+  final int index;
+
+  CustomCard({required this.selectedOption, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: selectedOption == index ? 8.0 : 2.0,
+      margin: EdgeInsets.all(8.0),
+      color: selectedOption == index ? Colors.indigo : Colors.white,
+      child: Center(
+        child: Text('Option $index'),
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+
+  CustomButton({required this.text, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: 60.0, // You can adjust this height as needed
+      height: 60.0,
       child: Align(
         alignment: Alignment.center,
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
-              // Handle button press logic here
-            },
+            onPressed: onPressed,
             style: ElevatedButton.styleFrom(
               primary: Colors.indigo,
               onPrimary: Colors.white,
             ),
             child: Text(
-              'Book Now',
+              text,
               style: TextStyle(fontSize: 20),
             ),
           ),
@@ -82,27 +169,45 @@ class _MyWidgetState extends State<MyWidget> {
       ),
     );
   }
+}
 
+class CustomContainerSlider extends StatelessWidget {
+  final List<ContainerData> containers;
+  final PageController pageController;
+  final Function(int) onPageChanged;
 
+  CustomContainerSlider({
+    required this.containers,
+    required this.pageController,
+    required this.onPageChanged,
+  });
 
-  Widget _buildContainerWidget(ContainerData data) {
-    // Get the screen width and height using MediaQuery
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // Calculate responsive text sizes based on screen width
-    final titleFontSize = screenWidth * 0.05; // 5% of screen width
-    final subtitleFontSize = screenWidth * 0.04; // 4% of screen width
-
-    // Calculate responsive container margin based on screen width
-    final containerMargin = EdgeInsets.symmetric(horizontal: screenWidth * 0.05); // 5% of screen width
-
-    // Calculate responsive SizedBox height based on screen height
-    final sizedBoxHeight = screenHeight * 0.1; // 10% of screen height
-
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      margin: containerMargin,
-      padding: EdgeInsets.all(1.0),
+      height: 190,
+      child: PageView.builder(
+        controller: pageController,
+        itemCount: containers.length,
+        onPageChanged: onPageChanged,
+        itemBuilder: (context, index) {
+          return CustomContainerWidget(data: containers[index]);
+        },
+      ),
+    );
+  }
+}
+
+class CustomContainerWidget extends StatelessWidget {
+  final ContainerData data;
+
+  CustomContainerWidget({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -113,7 +218,7 @@ class _MyWidgetState extends State<MyWidget> {
           Text(
             data.title,
             style: TextStyle(
-              fontSize: titleFontSize,
+              fontSize: 20, // You can adjust the font size
               fontWeight: FontWeight.bold,
               color: Colors.indigo,
             ),
@@ -121,95 +226,19 @@ class _MyWidgetState extends State<MyWidget> {
           Text(
             data.subtitle,
             style: TextStyle(
-              fontSize: subtitleFontSize,
+              fontSize: 16, // You can adjust the font size
             ),
           ),
-          SizedBox(height: sizedBoxHeight),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Handle "Redeem Now" button click
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                overlayColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                side: MaterialStateProperty.all<BorderSide>(
-                  BorderSide(color: Colors.indigo, width: 0.8),
-                ),
-              ),
-              child: Text(
-                "Redeem Now",
-                style: TextStyle(color: Colors.indigo),
-              ),
-            ),
+          SizedBox(height: 20, // You can adjust the height
+          ),
+          CustomButton(
+            text: "Redeem Now",
+            onPressed: () {
+              // Handle "Redeem Now" button click
+            },
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildPageIndicator(int pageCount) {
-    List<Widget> indicators = List.generate(pageCount, (int index) {
-      return Container(
-        width: 10.0,
-        height: 10.0,
-        margin: EdgeInsets.symmetric(horizontal: 4.0),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: currentPage == index ? Colors.blue : Colors.grey, // Customize indicator colors
-        ),
-      );
-    });
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        SizedBox(
-          height: 30, // Set the desired height for the dot indicator
-          child: Row(
-            children: indicators,
-          ),
-        ),
-      ],
-    );
-  }
-  Widget _buildHorizontalContainer() {
-    // Define a list of data for the horizontal containers
-    List<ContainerData> containers = [
-      ContainerData(
-        title: "Up To 20% OFF",
-        subtitle: "On All the cabinates",
-
-      ),
-      ContainerData(
-        title: "Container 2",
-        subtitle: "Subtitle 2",
-
-      ),
-      // Add more containers as needed
-    ];
-
-    return Column(
-      children: <Widget>[
-        Container(
-          height: 190, // Set the desired height for the horizontal container
-          child: PageView.builder(
-            controller: pageController,
-            itemCount: containers.length,
-            onPageChanged: (int page) {
-              setState(() {
-                currentPage = page;
-              });
-            },
-            itemBuilder: (context, index) {
-              return _buildContainerWidget(containers[index]);
-            },
-          ),
-        ),
-        SizedBox(height: 10),
-        _buildPageIndicator(containers.length),
-      ],
     );
   }
 }
@@ -218,10 +247,8 @@ class ContainerData {
   final String title;
   final String subtitle;
 
-
   ContainerData({
     required this.title,
     required this.subtitle,
-
   });
 }

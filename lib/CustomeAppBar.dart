@@ -33,44 +33,52 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             return <PopupMenuEntry<String>>[
               PopupMenuItem<String>(
                 value: 'Home',
-                child: Text(
-                  'Home',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: screenWidth > 600 ? 22 : 20,
+                child: Center(
+                  child: Text(
+                    'Home',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: screenWidth > 600 ? 22 : 20,
+                    ),
                   ),
                 ),
               ),
-              PopupMenuDivider(), // Add a divider
+              PopupMenuDivider(height: 10),
               PopupMenuItem<String>(
                 value: 'Notification',
-                child: Text(
-                  'Notification',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: screenWidth > 600 ? 22 : 20,
+                child: Center(
+                  child: Text(
+                    'Notification',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: screenWidth > 600 ? 22 : 20,
+                    ),
                   ),
                 ),
               ),
-              PopupMenuDivider(), // Add a divider
+              PopupMenuDivider(),
               PopupMenuItem<String>(
                 value: 'Profile',
-                child: Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: screenWidth > 600 ? 22 : 20,
+                child: Center(
+                  child: Text(
+                    'Profile',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: screenWidth > 600 ? 22 : 20,
+                    ),
                   ),
                 ),
               ),
-              PopupMenuDivider(), // Add a divider
+              PopupMenuDivider(),
               PopupMenuItem<String>(
                 value: 'Help Center',
-                child: Text(
-                  'Help Center',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: screenWidth > 600 ? 22 : 20,
+                child: Center(
+                  child: Text(
+                    'Help Center',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: screenWidth > 600 ? 22 : 20,
+                    ),
                   ),
                 ),
               ),
@@ -80,9 +88,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Handle the selection here
             print("Selected: $selectedItem");
           },
-          child: Center( // Center the content
+          child: Center(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Center the row
               children: [
                 Text(
                   'Progressive Towers',
@@ -100,7 +107,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-        const Spacer(),
+        Spacer(),
         CircleAvatar(
           backgroundImage: NetworkImage(
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY6HwtWnw9GiLWz1B8SwYz4Pvdpku1OCC-ww&usqp=CAU'),
