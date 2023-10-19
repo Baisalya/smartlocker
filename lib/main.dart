@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartlocker/screenone.dart';
 
 import 'CustomeAppBar.dart';
 
@@ -20,9 +21,10 @@ class CustomAppBarDemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(), // Use the custom AppBar
-      body: Center(
+      body:MyWidget(),
+     /* Center(
         child: Text("Your App Content Goes Here"),
-      ),
+      ),*/
     );
   }
 }
